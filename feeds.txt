@@ -1,0 +1,4 @@
+https://www.google.com/search?q=https://www.coindesk.com/arc/outboundfeeds/rss/
+https://www.google.com/search?q=https://cointelegraph.com/rss
+https://www.google.com/search?q=https://www.reuters.com/arc/outboundfeeds/rss/category/technology/%3Fuse_category_names%3Dtrue
+https://www.google.com/search?q=https://www.ft.com/stream/cryptocurrencies%3Fformat%3Drss
