@@ -6,7 +6,7 @@ from scripts.rss_parser import parse_and_store_feeds
 
 # --- Page Configuration ---
 st.set_page_config(
-    page_title="KryptoGPT Trend Analyser",
+    page_title="AstroCryptoLab",
     page_icon="🤖",
     layout="wide"
 )
