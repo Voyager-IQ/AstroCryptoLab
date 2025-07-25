@@ -16,15 +16,48 @@ DB_PATH = os.path.join('data', 'news.db')
 
 
 def get_db_connection():
-    """Establishes a connection to the SQLite database."""
-    # Ensure the database and table exist before connecting
-    if not os.path.exists(DB_PATH):
+    """Stellt eine Verbindung zur SQLite-Datenbank her und legt die Tabelle an, falls sie nicht existiert."""
+    db_exists = os.path.exists(DB_PATH)
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    # Tabelle anlegen, falls sie nicht existiert
+    if not db_exists:
         st.info("Database not found. Initializing...")
+        with conn:
+            conn.execute('''
+                CREATE TABLE IF NOT EXISTS articles (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT,
+                    link TEXT,
+                    source TEXT,
+                    published_date TEXT,
+                    summary TEXT,
+                    analyzed INTEGER DEFAULT 0,
+                    sentiment TEXT,
+                    mentioned_assets TEXT,
+                    investment_signal TEXT
+                )
+            ''')
         parse_and_store_feeds()
         st.success("Database initialized.")
-
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row  # This allows accessing columns by name
+    else:
+        # Sicherstellen, dass die Tabelle existiert (z.B. falls DB existiert, aber Tabelle fehlt)
+        with conn:
+            conn.execute('''
+                CREATE TABLE IF NOT EXISTS articles (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    title TEXT,
+                    link TEXT,
+                    source TEXT,
+                    published_date TEXT,
+                    summary TEXT,
+                    analyzed INTEGER DEFAULT 0,
+                    sentiment TEXT,
+                    mentioned_assets TEXT,
+                    investment_signal TEXT
+                )
+            ''')
     return conn
 
 
@@ -118,6 +151,7 @@ else:
                                            WHERE id = ?
                                            ''', (
                                                analysis_result['sentiment'],
+
                                                analysis_result['mentioned_assets'],
                                                analysis_result['investment_signal'],
                                                article['id']
